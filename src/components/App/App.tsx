@@ -24,6 +24,7 @@ const App = () => {
 
   const handleSearch = useDebouncedCallback((value: string) => {
     setQuery(value);
+    setPage(1);
   }, 300);
 
   return (
