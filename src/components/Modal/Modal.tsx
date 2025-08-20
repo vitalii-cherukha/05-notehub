@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import css from './Modal.module.css';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   children: ReactNode;
@@ -8,11 +9,15 @@ interface ModalProps {
 
 const Modal = ({ children, onClose }: ModalProps) => {
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEsc);
+    };
   }, [onClose]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -21,7 +26,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
     }
   };
 
-  return (
+  return createPortal(
     <div
       onClick={handleBackdropClick}
       className={css.backdrop}
@@ -29,7 +34,8 @@ const Modal = ({ children, onClose }: ModalProps) => {
       aria-modal="true"
     >
       <div className={css.modal}>{children}</div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

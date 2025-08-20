@@ -16,7 +16,3 @@ export interface CreateNote {
 export interface NoteTag {
   tag: string;
 }
-
-export interface NoteId {
-  id: string;
-}

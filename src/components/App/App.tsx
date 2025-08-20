@@ -7,6 +7,7 @@ import SearchBox from '../SearchBox/SearchBox';
 import Pagination from '../Pagination/Pagination';
 import NoteForm from '../NoteForm/NoteForm';
 import Modal from '../Modal/Modal';
+import { useDebouncedCallback } from 'use-debounce';
 
 const App = () => {
   const [query, setQuery] = useState('');
@@ -21,15 +22,19 @@ const App = () => {
     placeholderData: keepPreviousData,
   });
 
+  const handleSearch = useDebouncedCallback((value: string) => {
+    setQuery(value);
+  }, 300);
+
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox onChange={setQuery} />
+        <SearchBox onChange={handleSearch} />
         {isSuccess && data.totalPages > 1 && (
           <Pagination
             page={page}
             totalPages={data.totalPages}
-            setPage={setPage}
+            currentPage={setPage}
           />
         )}
         <button onClick={() => setIsOpen(true)} className={css.button}>

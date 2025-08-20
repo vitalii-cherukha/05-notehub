@@ -22,8 +22,10 @@ const initialValues: InitialValues = {
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required').min(3).max(50),
-  content: Yup.string().required('Content is required').max(500),
-  tag: Yup.string().required('Tag is required'),
+  content: Yup.string().max(500),
+  tag: Yup.string()
+    .required('Tag is required')
+    .oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'], 'Invalid tag'),
 });
 
 const NoteForm = ({ onClose }: NoteFormProps) => {
@@ -32,15 +34,19 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
+      onClose();
     },
   });
   const handleSubmit = (
     values: InitialValues,
     actions: FormikHelpers<InitialValues>
   ) => {
-    mutation.mutate(values);
-    actions.resetForm();
-    onClose();
+    mutation.mutate(values, {
+      onSuccess: () => {
+        onClose();
+        actions.resetForm();
+      },
+    });
   };
 
   return (
