@@ -12,8 +12,6 @@ import { useDebouncedCallback } from 'use-debounce';
 const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  // const [selectNote, setSelectNote] = useState<Note | null>(null);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const { data, isSuccess } = useQuery({

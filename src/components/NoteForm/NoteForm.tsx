@@ -90,11 +90,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           <button onClick={onClose} type="button" className={css.cancelButton}>
             Cancel
           </button>
-          <button
-            type="submit"
-            className={css.submitButton}
-            // disabled=false
-          >
+          <button type="submit" className={css.submitButton}>
             Create note
           </button>
         </div>
